@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io"
 	"net/http"
 	"time"
 )
@@ -56,15 +55,13 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 	}
 	defer createTaskResp.Body.Close()
 
-	createTaskBody, _ := io.ReadAll(createTaskResp.Body)
-	createTaskResponse := &CapBypassResponse{}
-	err = json.Unmarshal(createTaskBody, createTaskResponse)
-	if err != nil {
+	var createTaskResponse CapBypassResponse
+	if err := json.NewDecoder(createTaskResp.Body).Decode(&createTaskResponse); err != nil {
 		return nil, err
 	}
 
 	if createTaskResp.StatusCode != 200 {
-		return nil, fmt.Errorf(string(createTaskBody))
+		return nil, fmt.Errorf(createTaskResponse.Status)
 	}
 
 	for i := 0; i < TASK_TIMEOUT; i++ {
@@ -82,19 +79,17 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 		}
 		defer statusResp.Body.Close()
 
-		statusBody, _ := io.ReadAll(statusResp.Body)
-		statusResponse := &CapBypassResponse{}
-		err = json.Unmarshal(statusBody, statusResponse)
-		if err != nil {
+		var statusResponse CapBypassResponse
+		if err := json.NewDecoder(statusResp.Body).Decode(&statusResponse); err != nil {
 			return nil, err
 		}
 
 		if statusResponse.Status == "DONE" {
-			return statusResponse, nil
+			return &statusResponse, nil
 		}
 
 		if statusResponse.ErrorId == 1 {
-			return nil, errors.New(string(statusBody))
+			return nil, errors.New(statusResponse.Status)
 		}
 	}
 	return nil, errors.New("could not solve")
