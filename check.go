@@ -22,6 +22,6 @@ func checkTask(params CapBypassPayload) error {
 	if !exists {
 		return errors.New("unSupported task " + captchaTask + "you need to pay attention to capitalization, current support types fellow\\n")
 	}
-
+	
 	return nil
 }
