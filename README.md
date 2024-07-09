@@ -13,12 +13,11 @@ go get github.com/backchatted/CapBypassWrapped
 To use **CapBypassWrapped** here is the following example.
 
 ```go
-
 package main
 
 import (
-	"github.com/backchatted/CapBypassWrapped"
 	"fmt"
+	"github.com/backchatted/CapBypassWrapped"
 )
 
 func main() {
@@ -32,12 +31,21 @@ func main() {
 
 	fmt.Println(balance.Credits)
 
-	solve, err := CapBypass.Solve(map[string]any{
-		"type":             "FunCaptchaProxylessTask",
-		"websiteURL":       "https://iframe.arkoselabs.com/",
-		"websitePublicKey": "84E1DACC-3B8E-04D6-6E35-2A7D2B8ACFE1",
-		"websiteSubdomain": "https://client-api.arkoselabs.com",
-	})
+	var task capbypass.CapBypassPayload
+
+	task.Task.Type = "FunCaptchaProxylessTask"
+	task.Task.WebsiteURL = "https://www.example.com"
+	task.Task.WebsitePublicKey = "SITE_PUBLIC_KEY"
+	// Optional
+	task.Task.WebsiteSubdomain = "https://client-api.arkoselabs.com"
+	task.Task.Data = "{\"blob\": \"F5ebftFmrdZV9isL.cv4/ihbdWsMD4C1GhDkXD1f72AV4f1Rkhk1QMcNmOeM3XGS7EO8M1CBUmhsFirfsPdmbEtq/cplAQQEbIOo01KI0dq9kyqq0ZqBjUI+7W4L8ePOIxDqLr/Rk/eQLt95+0vos1TFDijvhRLc5YYTK3C4l436NKctdkrBhULF1mJleNUevF6oTxZPpm/A+DQYLPbT+37fwMgreXI5D8KGC2eaEdIXS32EfT39KSO/HJblN9tAVqpqRJRm1laijQfDvjWZq2Dtkfmjo/fnCI8kJoN63fSMtzlgWkmxO/wNkYVSR2RYu1+xCullLzZ9VPuqxst1wq44CK8GDrTL5BQ6y+1XEJrLIwpnBM/9KJl/GY6By9wax9YKn1Hqjl8TET+L4KP3GgScMotuZNKRjE8rDO1eeyCXH07BmzIG5ANDPc7iPw0HsvwTYjCWyDBE8+p1XepTcLRsm6Tv8+fpWjkRGNggv3EA=\""
+	// Only optional, when data is not set
+	task.Task.Headers = &map[string]interface{}{
+		"acceptLanguage": "en-US,en;q=0.5",
+		"userAgent":      "CapBypass",
+	}
+
+	solve, err := CapBypass.Solve(task)
 
 	if err != nil {
 		fmt.Println(err)
@@ -46,6 +54,7 @@ func main() {
 
 	fmt.Println(solve.Solution)
 }
+
 ```
 
 ## Contact
