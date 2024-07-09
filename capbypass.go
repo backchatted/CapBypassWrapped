@@ -42,11 +42,11 @@ func (c *CapBypass) Balance() (*CapBypassResponse, error) {
 	return response, nil
 }
 
-func (c *CapBypass) Solve(task map[string]any) (*CapBypassResponse, error) {
+func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 	_ = checkTask(task)
 	payload := &CapBypassPayload{
 		ClientKey: c.apiKey,
-		Task:      &task,
+		Task:      task.Task,
 	}
 
 	data, _ := json.Marshal(payload)

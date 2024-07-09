@@ -12,8 +12,8 @@ var (
 	}
 )
 
-func checkTask(params map[string]interface{}) error {
-	captchaTask, ok := params["type"].(string)
+func checkTask(params CapBypassPayload) error {
+	captchaTask := params.Task.Type
 	exists := false
 	for _, task := range SupportCaptchaTask {
 		if task == captchaTask {
@@ -24,8 +24,5 @@ func checkTask(params map[string]interface{}) error {
 		return errors.New("unSupported task " + captchaTask + "you need to pay attention to capitalization, current support types fellow\\n")
 	}
 
-	if !ok {
-		return errors.New("need Param 'type'")
-	}
 	return nil
 }
