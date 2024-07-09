@@ -91,6 +91,7 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 		if statusResponse.ErrorId == 1 {
 			return nil, errors.New(statusResponse.Errordescription)
 		}
+
 	}
 	return nil, errors.New("could not solve")
 }
