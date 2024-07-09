@@ -80,17 +80,18 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 		defer statusResp.Body.Close()
 
 		var statusResponse CapBypassResponse
+
 		if err := json.NewDecoder(statusResp.Body).Decode(&statusResponse); err != nil {
 			return nil, err
 		}
-
 		if statusResponse.Status == "DONE" {
 			return &statusResponse, nil
 		}
 
 		if statusResponse.ErrorId == 1 {
-			return nil, errors.New(statusResponse.Status)
+			return nil, errors.New(statusResponse.Errordescription)
 		}
+
 	}
 	return nil, errors.New("could not solve")
 }

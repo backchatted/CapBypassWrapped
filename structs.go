@@ -5,14 +5,15 @@ type CapBypass struct {
 }
 
 type CapBypassResponse struct {
-	ApiKey      string      `json:"apiKey,omitempty"`
-	Credits     float32     `json:"credits,omitempty"`
-	TotalSolves int         `json:"totalSolves,omitempty"`
-	Stats       interface{} `json:"stats,omitempty"`
-	ErrorId     int         `json:"errorId,omitempty"`
-	Status      string      `json:"status,omitempty"`
-	Solution    string      `json:"solution,omitempty"`
-	TaskId      string      `json:"taskId,omitempty"`
+	ApiKey           string      `json:"apiKey,omitempty"`
+	Credits          float32     `json:"credits,omitempty"`
+	TotalSolves      int         `json:"totalSolves,omitempty"`
+	Stats            interface{} `json:"stats,omitempty"`
+	ErrorId          int         `json:"errorId,omitempty"`
+	Status           string      `json:"status,omitempty"`
+	Solution         string      `json:"solution,omitempty"`
+	TaskId           string      `json:"taskId,omitempty"`
+	Errordescription string      `json:"errorDescription,omitempty"`
 }
 
 type CapBypassPayload struct {
