@@ -30,7 +30,7 @@ func main() {
 		return
 	}
 
-	fmt.Println(balance.ApiKey)
+	fmt.Println(balance.Credits)
 
 	solve, err := CapBypass.Solve(map[string]any{
 		"type":             "FunCaptchaProxylessTask",
