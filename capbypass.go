@@ -20,26 +20,25 @@ func New(apiKey string) *CapBypass {
 }
 
 func (c *CapBypass) Balance() (*CapBypassResponse, error) {
-	payload := &CapBypassPayload{
+	jsonPayload := &CapBypassPayload{
 		ClientKey: c.apiKey,
 	}
 
-	data, _ := json.Marshal(payload)
+	b, _ := json.Marshal(jsonPayload)
 
-	resp, err := http.Post(BASEURL+"/getBalance", "application/json", bytes.NewReader(data))
+	resp, err := http.Post(BASEURL+"/getBalance", "application/json", bytes.NewReader(b))
+
 	if err != nil {
 		return nil, err
 	}
 	defer resp.Body.Close()
 
-	body, _ := io.ReadAll(resp.Body)
-	response := &CapBypassResponse{}
-	err = json.Unmarshal(body, response)
-	if err != nil {
+	var response CapBypassResponse
+	if err := json.NewDecoder(resp.Body).Decode(&response); err != nil {
 		return nil, err
 	}
 
-	return response, nil
+	return &response, nil
 }
 
 func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
