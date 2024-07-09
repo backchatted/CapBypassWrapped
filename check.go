@@ -2,7 +2,6 @@ package capbypass
 
 import "errors"
 
-// I got this idea from https://github.com/capsolver/capsolver-go/blob/main/check.go
 var (
 	SupportCaptchaTask = []string{
 		"FunCaptchaTask",
