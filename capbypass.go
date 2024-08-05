@@ -59,11 +59,12 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 	if err := json.NewDecoder(createTaskResp.Body).Decode(&createTaskResponse); err != nil {
 		return nil, err
 	}
-
-	if createTaskResp.StatusCode != 200 {
-		return nil, fmt.Errorf(createTaskResponse.Status)
+	if createTaskResponse.errorMessage == "Not enough credits" {
+		return nil, fmt.Errorf(createTaskResponse.errorMessage)
 	}
-
+	if createTaskResp.StatusCode != 200 {
+		return nil, fmt.Errorf(createTaskResponse.errorMessage)
+	}
 	for i := 0; i < TASK_TIMEOUT; i++ {
 		statusPayload := &CapBypassPayload{
 			ClientKey: c.apiKey,
@@ -80,7 +81,6 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 		defer statusResp.Body.Close()
 
 		var statusResponse CapBypassResponse
-
 		if err := json.NewDecoder(statusResp.Body).Decode(&statusResponse); err != nil {
 			return nil, err
 		}
@@ -91,7 +91,6 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 		if statusResponse.ErrorId == 1 {
 			return nil, errors.New(statusResponse.Errordescription)
 		}
-
 	}
 	return nil, errors.New("could not solve")
 }
