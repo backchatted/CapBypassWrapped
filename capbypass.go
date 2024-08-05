@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"time"
 )
@@ -54,16 +55,21 @@ func (c *CapBypass) Solve(task CapBypassPayload) (*CapBypassResponse, error) {
 		return nil, err
 	}
 	defer createTaskResp.Body.Close()
-
-	var createTaskResponse CapBypassResponse
-	if err := json.NewDecoder(createTaskResp.Body).Decode(&createTaskResponse); err != nil {
+	bodystring, err := ioutil.ReadAll(createTaskResp.Body)
+	if err != nil {
 		return nil, err
 	}
-	if createTaskResponse.errorMessage == "Not enough credits" {
-		return nil, fmt.Errorf(createTaskResponse.errorMessage)
+
+	var createTaskResponse CapBypassResponse
+	if err := json.Unmarshal(bodystring, &createTaskResponse); err != nil {
+		return nil, err
+	}
+
+	if createTaskResponse.ErrorMessage == "Not enough credits" {
+		return nil, fmt.Errorf(createTaskResponse.ErrorMessage)
 	}
 	if createTaskResp.StatusCode != 200 {
-		return nil, fmt.Errorf(createTaskResponse.errorMessage)
+		return nil, fmt.Errorf(createTaskResponse.ErrorMessage)
 	}
 	for i := 0; i < TASK_TIMEOUT; i++ {
 		statusPayload := &CapBypassPayload{

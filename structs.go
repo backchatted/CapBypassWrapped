@@ -14,7 +14,7 @@ type CapBypassResponse struct {
 	Solution         string      `json:"solution,omitempty"`
 	TaskId           string      `json:"taskId,omitempty"`
 	Errordescription string      `json:"errorDescription,omitempty"`
-	errorMessage     string      `json:"errorMessage,omitempty"`
+	ErrorMessage     string      `json:"errorMessage,omitempty"`
 }
 
 type CapBypassPayload struct {
